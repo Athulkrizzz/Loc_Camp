@@ -1,0 +1,64 @@
+<% layout('layouts/boilerplate') %>
+<!-- 
+    <form action="/campground" method="POST">
+         <label class="form-label" for="name">Name:</label>
+        <input class="form-control" type="text" name="name" placeholder="Campground name" id="name" required>
+        
+         <label class="form-label" for="location">Location:</label>
+        
+        <input class="form-control" type="text" id="location" name="location" placeholder="Campground location" required>
+    
+        <button type="submit">Add Campground</button>
+        <a href="/campground">Back</a>
+    </form> -->
+    <div class="row">
+        <h1 class="text-center text-primary">New CampGround</h1>
+        <div class="col-6 offset-3">
+            <form action="/campground" method="POST">
+
+                <div class="mb-3">
+                     
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="name">Name:</label>
+                    <input class="form-control" type="text" name="name" placeholder="Campground name" id="name" required>
+                    
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" name="image" placeholder="image" id="image" required>
+                    
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="price">Campground Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price-label">$</span>
+                        <input class="form-control" type="text" name="price" placeholder="price" id="price" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location:</label>
+                
+                    <input class="form-control" type="text" id="location" name="location" placeholder="Campground location" required>
+                
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                
+                    <textarea class="form-control" type="text" id="description" name="description" placeholder="Campground location" required>
+                        </textarea>
+                
+                </div>
+
+            
+               
+                <button class="btn btn-success mb-3" type="submit">Add Campground</button>
+                <a class="btn btn-danger" href="/campground">Back</a>
+            </form>
+
+        </div>
+    </div>
