@@ -1,13 +1,14 @@
 <% layout('layouts/boilerplate') %>
 
     <h1>Campgrounds</h1>
-    <% let count=0 %>
+   
     <ol>
     <% for( let camp of campgrounds) {%>
         <li><a href="campground/<%= camp._id %>"><%=  camp.name %></a></li>
+         <% let count=0 %>
         <% count++ %>
          
         <% } %>
     </ol>
-        <h2> <%= count %> Campgrounds</h2>
+        
         <a href="/campground/new">Add New Campground</a>

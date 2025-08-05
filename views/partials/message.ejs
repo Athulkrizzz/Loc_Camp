@@ -1,0 +1,12 @@
+<% if(success && success.length ){ %>
+<div class="alert alert-success alert-dismissible fade show mb-3 mh-1" role="alert">
+    <%= success %>
+</div>
+<% } %>
+<% if(error && error.length ){ %>
+
+<div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" style="padding-top: 4px; padding-bottom: 4px; font-size: 0.9rem;">
+    <%= error %>
+</div>
+
+<% } %>

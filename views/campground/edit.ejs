@@ -2,11 +2,11 @@
 
     <!-- <form action="/campground/<%= camp._id %>?_method=PUT" method="POST">
         <label for="name">Name:</label>
-        <input type="text" name="name" placeholder="Campground name" id="name" value="<%=camp.name%>">
+        <input type="text" name="campground[name"] placeholder="Campground name" id="name" value="<%=camp.name%>">
         
         <label for="location">Location:</label>
         
-        <input type="text" id="location" name="location" placeholder="Campground location" value="<%=camp.location  %>"  required  value="<%=camp.name%>">
+        <input type="text" id="location" name="campground[locat]ion" placeholder="Campground location" value="<%=camp.location  %>"  required  value="<%=camp.name%>">
         <label for="price">Price:</label>
         <input type="number" id="price" name='price' placeholder="price" required  value="<%=camp.name%>">
 
@@ -15,9 +15,9 @@
     </form> -->
 
     <div class="row">
-        <h1 class="text-center text-primary">Edit <%= camp.name %></h1>
+        <h1 class="text-center text-dark">Edit <%= camp.name %></h1>
         <div class="col-6 offset-3">
-            <form action="/campground/<%= camp._id %>?_method=PUT" method="POST">
+            <form action="/campground/<%= camp._id %>?_method=PUT" method="POST" novalidate class="validation" enctype="multipart/form-data">    
 
                 <div class="mb-3">
                      
@@ -25,44 +25,66 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="name">Name:</label>
-                    <input class="form-control" type="text" name="name" placeholder="Campground name" id="name" required  value="<%=camp.name%>">
-                    
+                    <input class="form-control" type="text" name="campground[name]" placeholder="Campground name" id="name"  value="<%=camp.name%> " required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" name="image" placeholder="image" id="image" required  value="<%=camp.image%>">
-                    
+                    <label class="form-label" for="image">Add Image</label>
+                    <input class="form-control" type="file" name="image" placeholder="image" id="image" required multiple >
+
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="price">Campground Price</label>
                     <div class="input-group">
                         <span class="input-group-text" id="price-label">$</span>
-                        <input class="form-control" type="text" name="price" placeholder="price" id="price" required  value="<%=camp.prize%>">
+                        <input class="form-control" type="text" name="campground[price]" placeholder="price" id="price" required  value="<%=camp.prize%>">
+                    </div>
+                        <div class="valid-feedback">
+                        Looks good!
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="location">Location:</label>
                 
-                    <input class="form-control" type="text" id="location" name="location" placeholder="Campground location" required  value="<%=camp.location%>">
-                
+                    <input class="form-control" type="text" id="location" name="campground[location]" placeholder="Campground location" required  value="<%=camp.location%>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
 
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                 
-                    <textarea class="form-control" type="text" id="description" name="description" placeholder="Campground location" required  value="<%=camp.description%>">
+                    <textarea class="form-control" type="text" id="description" name="campground[description]" placeholder="Campground location" required  value="<%=camp.description%>">
                         </textarea>
-                
+                        <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
-
+                <div class="mb-3">
+                    <% camp.images.forEach(function(img,i){ %>
+                        <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox"  name="deleteImages[]" value="<%= img.filename %>" id="image-<%= i %>">
+                             <label  for="image-<%= i %>">Delete Image</label>
+                        </div>
+                       
+                        <% }) %>
+                </div>
             
                
-                <button class="btn btn-success mb-3" type="submit">Edit Campground</button>
-                <a class="btn btn-danger" href="/campground">Back</a>
+                <button class="btn btn-info mb-3" type="submit">Edit Campground</button>
+              
             </form>
-
+            <a class="btn btn-danger" href="/campground/camp">Back</a>
         </div>
     </div>
+
+
+
+
 

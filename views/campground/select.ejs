@@ -1,16 +1,200 @@
 <% layout('layouts/boilerplate') %>
-    <h1><%= camp.name %></h1>
-    <h3><%= camp.location %></h3>
-    <h5><%= camp.price %></h5>
-    <img src="<%=camp.image %>" alt="">
-    <p><%= camp.description %></p>
-    <a href="/campground">Back to Home</a>
-    <a href="/campground/<%= camp._id %>/edit">Edit</a>
-    <p>
-        <form action="/campground/<%=camp._id %>?_method=DELETE" method="POST">
-            <button>
-                Delete
-            </button>
-        </form>
-    </p>
+<link rel="stylesheet" href="/stylesheet/star.css">
+
+
+<div class="row mb-3">
+    <div class="col-6 mb-3">
+        <div class="card" >
+<!-- <div id="campgroundCarouselIndicators" class="carousel slide"> -->
+
+<div id="campgroundCarouselIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="hover">
+
+
+
+  <div class="carousel-indicators">
+  <% for (let i = 0; i < camp.images.length; i++) { %>
+    <button type="button" data-bs-target="#campgroundCarouselIndicators" data-bs-slide-to="<%= i %>" 
+      class="<%= i === 0 ? 'active' : '' %>" 
+      aria-current="<%= i === 0 ? 'true' : 'false' %>" 
+      aria-label="Slide <%= i + 1 %>">
+    </button>
+  <% } %>
+</div>
+
+  <!-- <div class="carousel-inner">
+    <%for (img of camp.images){ %> 
+    <div class="carousel-item active">
+         
+      <img src="<%=img.url%>" class="d-block w-100" alt="...">
+     
+    </div>
+    
+     <% } %>
+  </div> -->
+  <div class="carousel-inner">
+  <% for (let i = 0; i < camp.images.length; i++) { %>
+    <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+      <img src="<%= camp.images[i].url %>" class="d-block w-100" alt="...">
+    </div>
+  <% } %>
+</div>
+
+  <% if(camp.images.length >1){ %>
+  <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarouselIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarouselIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+  <% } %>
+</div>
+     <div id="carouselCounter" class="text-center mt-2 text-muted">
+  1 / <%= camp.images.length %>
+</div>
+  
+<!-- <div class="row mb-3">
+    <div class="col-6 mb-3">
+        <div class="card" > -->
+            <!-- <div class="card-item max-vh-50"> -->
+                
+            
+                    <!-- <div class="row max-vh-50">
+                        <%for (img of camp.images){ %>
+                        <img   src="<%=img.url%>" class="card-img-top" alt="" >
+                        <% } %>
+                    </div> -->
+
+                    <div class="row">
+                                    <div class="card-body">
+              <h5 class="card-title"><%= camp.name %></h5>
+              <p class="card-text"><%= camp.description %></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%= camp.location %></li>
+              <li class="list-group-item text-muted">Posted By <%= camp.postedBy.username %></li>
+              <li class="list-group-item"><%= camp.price %>/Day</li>
+          
+            </ul>
+            
+            <% if(currentuser && currentuser._id.equals(camp.postedBy._id)){ %>  
+                    <div class="card-body">
+                <a href="/campground/<%= camp._id %>/edit" class="card-link btn btn-warning" >Edit</a>
+                <form class="d-inline" action="/campground/<%=camp._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" type="submit">
+                        Delete
+                    </button>
+                </form>
+            </div>  
+            <% } %>
+        
+                    </div>
+                   
+ 
+
+
+     </div>     
+
+     
+                    
+</div>
+                        <div class="col-6">
+                            <div id='map' class="mb-3" style='width: 500px; height: 300px;'></div>
+ <form action="/campground/<%= camp._id %>/review" method="POST" class="card-body validation">
+
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+<fieldset class="starability-basic">
+  
+  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+  <label for="first-rate1" title="Terrible">1 star</label>
+  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+  <label for="first-rate2" title="Not good">2 stars</label>
+  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+  <label for="first-rate3" title="Average">3 stars</label>
+  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+  <label for="first-rate4" title="Very good">4 stars</label>
+  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+  <label for="first-rate5" title="Amazing">5 stars</label>
+</fieldset>
+                            <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="body" class="form-label">Review</label>
+                            <textarea class="form-control" id="body" name="review[body]" rows="3"></textarea required>
+                        </div>
+                        <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                        <button type="submit" class="btn btn-primary mb-3">Add Review</button>
+                    </form> 
+                    <!-- </div>
+                    <div class="col-6"> -->
+                            <%for (let review of camp.reviews ){%>
+        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted"><%= review.postedBy.username %>:</h6>
+                                 <p class="starability-result" data-rating="<%= review.rating %>">
+  
+  </p>
+                                
+                                <p class="card-text"><%= review.body %></p>
+
+
+                                        <div class="card-body">
+        
+            <% if(currentuser && currentuser._id.equals(review.postedBy._id)){ %>  
+                <form class="d-inline" action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" type="submit">
+                        Delete
+                    </button>
+                </form>
+                <% } %>
+            </div>
+<!-- 
+                                <form action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST" class="d-inline">
+                                  <div class="row-2">
+
+                                    <button class="btn btn-danger" type="submit">Delete Review</button>
+
+                                  </div>
+                                </form> -->
+</div>
+                        </div>
+                       
+                        <% } %>
+                    
+          </div>
+                       
+
+    
+</div>
+<a href="/campground/camp">Back to Home</a>
+<script>
+  const totalSlides = <%= camp.images.length %>;
+  const carouselElement = document.getElementById('campgroundCarouselIndicators');
+  const counterElement = document.getElementById('carouselCounter');
+
+  carouselElement.addEventListener('slid.bs.carousel', function (event) {
+    const currentSlide = event.to + 1; // Bootstrap uses zero-based indexing
+    counterElement.textContent = `${currentSlide} / ${totalSlides}`;
+  });
+</script>
+
+
+<script>
+  const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+
+const campground = <%- JSON.stringify(camp) %>
+  // const campground = JSON.stringify(camp).replace(/</g, '\\u003c') ;
+
+</script>
+<script src='/javascript/map.js'></script>
+
+
     
