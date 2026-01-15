@@ -100,7 +100,7 @@
                     
 </div>
                         <div class="col-6">
-                            <div id='map' class="mb-3" style='width: 500px; height: 300px;'></div>
+                            <div id='map' class="mb-6" style='width: 500px; height: 300px;'></div>
  <form action="/campground/<%= camp._id %>/review" method="POST" class="card-body validation">
 
                         <div class="mb-3">
@@ -156,14 +156,7 @@
                 </form>
                 <% } %>
             </div>
-<!-- 
-                                <form action="/campground/<%= camp._id %>/review/<%= review._id %>?_method=DELETE" method="POST" class="d-inline">
-                                  <div class="row-2">
 
-                                    <button class="btn btn-danger" type="submit">Delete Review</button>
-
-                                  </div>
-                                </form> -->
 </div>
                         </div>
                        
@@ -186,14 +179,10 @@
   });
 </script>
 
-
-<script>
-  const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
-
-const campground = <%- JSON.stringify(camp) %>
-  // const campground = JSON.stringify(camp).replace(/</g, '\\u003c') ;
-
-</script>
+<%- "<script>" %>
+const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+const campground = <%- JSON.stringify(camp) %>;
+<%-"</script>"%>
 <script src='/javascript/map.js'></script>
 
 

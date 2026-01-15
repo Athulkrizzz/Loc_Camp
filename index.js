@@ -18,8 +18,9 @@ const userroutes=require('./routes/user');
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
 const User=require('./models/user');
-
-
+const mongoSanitize = require('express-mongo-sanitize');
+const sanitizeHtml=require('sanitize-html');
+const helmet=require('helmet');
 app.engine('ejs',ejsMate)
 app.set('view engine','ejs')
 app.set('views',path.join(__dirname,'views'))
@@ -27,14 +28,17 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
-
+app.use(mongoSanitize());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 const sessionConfig={
+    name:"session",
     secret: 'thisshouldbe a long secret',
     resave:false,
     saveUninitialized:true,
     cookie:{
         httpOnly:true,
+        // secure: true,
         expires: Date.now()  + 1000*60*60*24*7,
         maxAge: 1000*60*60*24*7 // 7 days
     }
@@ -91,6 +95,9 @@ app.get('/logout',(req,res)=>{
 app.use('/',userroutes);
 app.use('/campground',camproutes);
 app.use('/campground/:id/review',reviewroutes);
+// app.get('/', (req, res) => {
+//     res.render('home')
+// });
 app.all('*',(req,res,next)=>{
     next(new AppError("Page Not Found",404))
 })

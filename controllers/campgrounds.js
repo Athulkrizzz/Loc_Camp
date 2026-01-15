@@ -2,6 +2,9 @@ const campground=require('../models/CampGround')
 const { cloudinary } = require('../cloudinary');
 const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
+module.exports.homePage=(req,res)=>{
+    res.render('home')
+}
 module.exports.getCamp=async(req,res)=>{
     const campgrounds=await campground.find({})
 
@@ -73,26 +76,24 @@ module.exports.createCamp = async (req, res, next) => {
     req.flash('error', 'Location not found');
     return res.redirect('/campground/new');
   }
+   const camp = new Campground(req.body.campground);
 
-  const geometry = {
-    type: 'Point',
-    coordinates: geoData.features[0].geometry.coordinates
-  };
-
+  camp.geometry = geoData.features[0].geometry;
+  camp.location = geoData.features[0].place_name;
   const images = req.files.map(f => ({
     url: f.path,
     filename: f.filename
   }));
 
  
-  delete req.body.campground.geometry;
+  // delete req.body.campground.geometry;
 
-  const camp = new campground({
-    ...req.body.campground,
-    geometry,
-    images,
-    postedBy: req.user._id
-  });
+  // const camp = new campground({
+  //   ...req.body.campground,
+  //   geometry,
+  //   images,
+  //   postedBy: req.user._id
+  // });
 console.log(JSON.stringify(camp, null, 2));
 
   await camp.save();
@@ -164,11 +165,17 @@ module.exports.updateCamp=async(req,res,next)=>{
     const geoData=await maptilerClient.geocoding.forward(
         req.body.campground.location,{limit:1}
     )
+       if (!geoData.features?.length) {
+        req.flash('error', 'Could not geocode that location. Please try again and enter a valid location.');
+        return res.redirect(`/campgrounds/${id}/edit`);
+    }
+        camp.geometry = geoData.features[0].geometry;
+    camp.location = geoData.features[0].place_name;
     // camp.geometry=geoData.features[0].geometry;
-    camp.geometry = {
-  type: 'Point',
-  coordinates: geoData.features[0].geometry.coordinates
-};
+//     camp.geometry = {
+//   type: 'Point',
+//   coordinates: geoData.features[0].geometry.coordinates
+// };
     await camp.save();
     
      req.flash('success','successfully updated the campground')

@@ -1,0 +1,290 @@
+    .campgrounds-page {
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .page-header h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .page-header h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(to right, #4ecdc4, #ff6b6b);
+        border-radius: 2px;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+    }
+
+    .campground-count {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #4ecdc4 0%, #45b7aa 100%);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-top: 1rem;
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+    }
+
+    .campground-count i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    #cluster-map {
+        width: 100%;
+        height: 500px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        margin-bottom: 3rem;
+        overflow: hidden;
+        border: 3px solid #f8f9fa;
+    }
+
+    .campgrounds-container {
+        margin-top: 2rem;
+    }
+
+    .campground-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+        border: none;
+    }
+
+    .campground-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .campground-card .row {
+        margin: 0;
+    }
+
+    .campground-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+        padding: 0;
+    }
+
+    .campground-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .campground-card:hover .campground-image {
+        transform: scale(1.1);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(26, 26, 46, 0.8);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+    }
+
+    .image-overlay i {
+        color: #4ecdc4;
+        margin-right: 0.3rem;
+    }
+
+    .campground-content {
+        padding: 1.5rem;
+    }
+
+    .campground-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .campground-title i {
+        color: #ff6b6b;
+        margin-right: 0.5rem;
+        font-size: 1.4rem;
+    }
+
+    .campground-description {
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .campground-location {
+        color: #495057;
+        font-size: 0.95rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #4ecdc4;
+    }
+
+    .campground-location i {
+        color: #4ecdc4;
+        margin-right: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .view-details-btn {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        border: none;
+        padding: 0.7rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .view-details-btn i {
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .view-details-btn:hover {
+        background: linear-gradient(135deg, #4ecdc4 0%, #45b7aa 100%);
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        color: white;
+    }
+
+    .view-details-btn:hover i {
+        transform: translateX(5px);
+    }
+
+    .no-campgrounds {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin: 2rem 0;
+    }
+
+    .no-campgrounds i {
+        font-size: 5rem;
+        color: #e0e0e0;
+        margin-bottom: 1.5rem;
+    }
+
+    .no-campgrounds h3 {
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+
+    .no-campgrounds p {
+        color: #adb5bd;
+    }
+
+    .filter-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .filter-section input {
+        flex: 1;
+        min-width: 250px;
+        padding: 0.7rem 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .filter-section input:focus {
+        border-color: #4ecdc4;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.15);
+    }
+
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 2rem;
+        }
+
+        #cluster-map {
+            height: 350px;
+            margin-bottom: 2rem;
+        }
+
+        .campground-card .row {
+            flex-direction: column;
+        }
+
+        .campground-image-wrapper {
+            height: 200px;
+        }
+
+        .campground-content {
+            padding: 1.2rem;
+        }
+
+        .campground-title {
+            font-size: 1.3rem;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }

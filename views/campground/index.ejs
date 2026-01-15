@@ -1,55 +1,105 @@
 <% layout ('layouts/boilerplate')%>
 
-<div id="map" style="width: 100%; height: 500px;"></div>
-    <h1>All Campgrounds</h1>
-    <!-- <div>
-        <a href="/campground/new">Add New Campground</a>
-    </div> -->
-          <% let count=0 %>
-        
-    <% for(let camp of campgrounds){ %>
-    
-        <% count++ %>
-            <div class="col-10 offset-1">
-                               <div class="card mb-3">
-            <div class="row">
+<link rel="stylesheet" href="/stylesheet/main.css">
 
-                <div class="col-3">
-                    <img class="img-fluid " src="<%=camp.images[0].url %>" alt=" ">
-
-
-                </div>
-                <div class="col-6 ">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= camp.name %></h5>
-                        <p class="card-text"><%= camp.description %></p>
-                        <h6 class="text-muted"><%= camp.location %></h6>
-                        <a href="/campground/<%=camp._id %>" class="btn btn-primary"><%=camp.name%></a>
-                    </div>
-                </div>
-            
+<div class="campgrounds-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-campground"></i>
+                All Campgrounds
+            </h1>
+            <p class="page-subtitle">Explore amazing camping destinations across India</p>
+            <% let count = campgrounds.length %>
+            <div class="campground-count">
+                <i class="fas fa-map-marked-alt"></i>
+                <%= count %> Campground<%= count !== 1 ? 's' : '' %> Available
             </div>
-
-
         </div>
 
-        </div>
+        <!-- Cluster Map -->
+        <div id="cluster-map"></div>
 
-
-    
-    <% } %>
-    <div class="row">
-        <div class="col-10 offset-1">
-            
-                <h2 class="text-primary"> <%= count %> Campgrounds</h2>
+        <!-- Campgrounds List -->
+        <div class="campgrounds-container">
+            <% if(campgrounds.length === 0) { %>
+                <div class="no-campgrounds">
+                    <i class="fas fa-campground"></i>
+                    <h3>No Campgrounds Found</h3>
+                    <p>Be the first to add a campground to our collection!</p>
+                    <a href="/campground/new" class="view-details-btn mt-3">
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Campground
+                    </a>
+                </div>
+            <% } else { %>
+                <% for(let camp of campgrounds) { %>
+                    <div class="campground-card card">
+                        <div class="row g-0">
+                            <div class="col-md-4 campground-image-wrapper">
+                                <% if(camp.images && camp.images.length > 0) { %>
+                                    <img src="<%= camp.images[0].url %>" 
+                                         alt="<%= camp.name %>" 
+                                         class="campground-image">
+                                    <div class="image-overlay">
+                                        <i class="fas fa-images"></i>
+                                        <%= camp.images.length %> Photo<%= camp.images.length !== 1 ? 's' : '' %>
+                                    </div>
+                                <% } else { %>
+                                    <img src="https://via.placeholder.com/400x250?text=No+Image" 
+                                         alt="No image available" 
+                                         class="campground-image">
+                                <% } %>
+                            </div>
+                            
+                            <div class="col-md-8">
+                                <div class="campground-content">
+                                    <h5 class="campground-title">
+                                        <i class="fas fa-campground"></i>
+                                        <%= camp.name %>
+                                    </h5>
+                                    
+                                    <p class="campground-description">
+                                        <%= camp.description %>
+                                    </p>
+                                    
+                                    <div class="campground-location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <%= camp.location %>
+                                    </div>
+                                    
+                                    <a href="/campground/<%= camp._id %>" class="view-details-btn">
+                                        View Details
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
         </div>
     </div>
-   
-<script src="/javascript/main"></script>
-<script>
-      const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
-</script>
+</div>
 
+<!-- Map Configuration Script -->
+<%- "<script>" %>
+const maptilerApiKey = "<%- process.env.MAPTILER_API_KEY %>";
+const campgrounds = {
+    type: "FeatureCollection",
+    features: <%- JSON.stringify(
+        campgrounds.map(campground => ({
+            type: "Feature",
+            geometry: campground.geometry,
+            properties: { 
+                popUpMarkup: campground?.properties?.popUpMarkup,
+                name: campground.name,
+                id: campground._id
+            }
+        }))
+    ) %>
+};
+<%- "</script>" %>
 
-  
-      
+<script src="/javascript/main.js"></script>

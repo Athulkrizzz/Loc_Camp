@@ -1,90 +1,571 @@
 <% layout('layouts/boilerplate') %>
 
-    <!-- <form action="/campground/<%= camp._id %>?_method=PUT" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" name="campground[name"] placeholder="Campground name" id="name" value="<%=camp.name%>">
-        
-        <label for="location">Location:</label>
-        
-        <input type="text" id="location" name="campground[locat]ion" placeholder="Campground location" value="<%=camp.location  %>"  required  value="<%=camp.name%>">
-        <label for="price">Price:</label>
-        <input type="number" id="price" name='price' placeholder="price" required  value="<%=camp.name%>">
+<style>
+    .edit-page {
+        padding: 3rem 0;
+        min-height: 80vh;
+    }
 
-        <button type="submit">Update</button>
-        <a href="/campground/<%= camp._id %>">Cancel</a>
-    </form> -->
+    .edit-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
 
-    <div class="row">
-        <h1 class="text-center text-dark">Edit <%= camp.name %></h1>
-        <div class="col-6 offset-3">
-            <form action="/campground/<%= camp._id %>?_method=PUT" method="POST" novalidate class="validation" enctype="multipart/form-data">    
+    .edit-header h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-                <div class="mb-3">
-                     
+    .edit-header h1 i {
+        color: #4ecdc4;
+        font-size: 2.2rem;
+    }
 
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="name">Name:</label>
-                    <input class="form-control" type="text" name="campground[name]" placeholder="Campground name" id="name"  value="<%=camp.name%> " required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="image">Add Image</label>
-                    <input class="form-control" type="file" name="image" placeholder="image" id="image" required multiple >
+    .edit-header::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to right, #4ecdc4, #ff6b6b);
+        margin: 1rem auto 0;
+        border-radius: 2px;
+    }
 
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="price">Campground Price</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="price-label">$</span>
-                        <input class="form-control" type="text" name="campground[price]" placeholder="price" id="price" required  value="<%=camp.prize%>">
-                    </div>
-                        <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
+    .edit-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        animation: fadeInUp 0.6s ease-out;
+    }
 
-                <div class="mb-3">
-                    <label class="form-label" for="location">Location:</label>
-                
-                    <input class="form-control" type="text" id="location" name="campground[location]" placeholder="Campground location" required  value="<%=camp.location%>">
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.7rem;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+    }
 
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
-                
-                    <textarea class="form-control" type="text" id="description" name="campground[description]" placeholder="Campground location" required  value="<%=camp.description%>">
-                        </textarea>
-                        <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <% camp.images.forEach(function(img,i){ %>
-                        <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
-                        <div class="form-check-inline">
-                            <input type="checkbox"  name="deleteImages[]" value="<%= img.filename %>" id="image-<%= i %>">
-                             <label  for="image-<%= i %>">Delete Image</label>
+    .form-label i {
+        margin-right: 0.5rem;
+        color: #4ecdc4;
+        font-size: 1.1rem;
+    }
+
+    .form-control, .form-select {
+        padding: 0.9rem 1rem;
+        border: 2px solid #e8ecf1;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #4ecdc4;
+        box-shadow: 0 0 0 0.25rem rgba(78, 205, 196, 0.15);
+        background: white;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .input-group-text {
+        background: linear-gradient(135deg, #4ecdc4 0%, #45b7aa 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+        border-radius: 12px 0 0 12px;
+        padding: 0.9rem 1.2rem;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 12px 12px 0;
+    }
+
+    .valid-feedback {
+        display: none;
+        color: #28a745;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-control:valid ~ .valid-feedback {
+        display: block;
+    }
+
+    /* Image Management Section */
+    .image-management {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .image-management-title {
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .image-management-title i {
+        color: #ff6b6b;
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .image-item {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .image-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-item img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .image-checkbox {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .image-checkbox:hover {
+        background: white;
+    }
+
+    .image-checkbox input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .image-checkbox label {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #dc3545;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .delete-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(220, 53, 69, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .image-item input[type="checkbox"]:checked ~ .delete-overlay {
+        opacity: 1;
+    }
+
+    .delete-overlay i {
+        color: white;
+        font-size: 2rem;
+    }
+
+    .no-images {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+
+    .no-images i {
+        font-size: 3rem;
+        color: #e0e0e0;
+        margin-bottom: 1rem;
+    }
+
+    /* File Upload Styling */
+    .file-upload-wrapper {
+        position: relative;
+    }
+
+    .form-control[type="file"] {
+        cursor: pointer;
+    }
+
+    .form-control[type="file"]::-webkit-file-upload-button {
+        background: linear-gradient(135deg, #4ecdc4 0%, #45b7aa 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-control[type="file"]::-webkit-file-upload-button:hover {
+        background: linear-gradient(135deg, #45b7aa 0%, #3da89d 100%);
+    }
+
+    /* Buttons */
+.btn-submit {
+    background: linear-gradient(135deg, #4ecdc4 0%, #45b7aa 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+}
+
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #45b7aa 0%, #3da89d 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(78, 205, 196, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #dc3545;
+        border: 2px solid #dc3545;
+        padding: 0.9rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .btn-cancel:hover {
+        background: #dc3545;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #f8f9fa;
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-title i {
+        margin-right: 0.5rem;
+        color: #ff6b6b;
+    }
+
+    @media (max-width: 768px) {
+        .edit-page {
+            padding: 2rem 0;
+        }
+
+        .edit-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .edit-header h1 {
+            font-size: 1.8rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .image-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="edit-page">
+    <div class="container">
+        <div class="edit-header">
+            <h1>
+                <i class="fas fa-edit"></i>
+                Edit <%= camp.name %>
+            </h1>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="edit-card">
+                    <form action="/campground/<%= camp._id %>?_method=PUT" method="POST" novalidate class="validation" enctype="multipart/form-data">
+                        
+                        <!-- Basic Information Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-info-circle"></i>
+                                Basic Information
+                            </h3>
+
+                            <div class="mb-4">
+                                <label class="form-label" for="name">
+                                    <i class="fas fa-campground"></i>
+                                    Campground Name
+                                </label>
+                                <input 
+                                    class="form-control" 
+                                    type="text" 
+                                    name="campground[name]" 
+                                    placeholder="Enter campground name" 
+                                    id="name" 
+                                    value="<%= camp.name %>" 
+                                    required>
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle"></i> Looks good!
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label" for="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Location
+                                </label>
+                                <input 
+                                    class="form-control" 
+                                    type="text" 
+                                    id="location" 
+                                    name="campground[location]" 
+                                    placeholder="Enter location" 
+                                    value="<%= camp.location %>" 
+                                    required>
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle"></i> Looks good!
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label" for="price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Price per Night
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input 
+                                        class="form-control" 
+                                        type="number" 
+                                        name="campground[price]" 
+                                        placeholder="Enter price" 
+                                        id="price" 
+                                        value="<%= camp.prize %>" 
+                                        required>
+                                </div>
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle"></i> Looks good!
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label" for="description">
+                                    <i class="fas fa-align-left"></i>
+                                    Description
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="description" 
+                                    name="campground[description]" 
+                                    placeholder="Describe your campground..." 
+                                    required><%= camp.description %></textarea>
+                                <div class="valid-feedback">
+                                    <i class="fas fa-check-circle"></i> Looks good!
+                                </div>
+                            </div>
                         </div>
-                       
-                        <% }) %>
+
+                        <!-- Image Management Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-images"></i>
+                                Images
+                            </h3>
+
+                            <div class="mb-4">
+                                <label class="form-label" for="image">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    Add New Images
+                                </label>
+                                <input 
+                                    class="form-control" 
+                                    type="file" 
+                                    name="image" 
+                                    id="image" 
+                                    multiple 
+                                    accept="image/*">
+                                <small class="text-muted">You can select multiple images at once</small>
+                            </div>
+
+                            <% if(camp.images && camp.images.length > 0) { %>
+                                <div class="image-management">
+                                    <div class="image-management-title">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Current Images (Select to delete)
+                                    </div>
+                                    <div class="image-grid">
+                                        <% camp.images.forEach(function(img, i) { %>
+                                            <div class="image-item">
+                                                <img src="<%= img.thumbnail %>" alt="Campground image <%= i + 1 %>">
+                                                <div class="image-checkbox">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        name="deleteImages[]" 
+                                                        value="<%= img.filename %>" 
+                                                        id="image-<%= i %>">
+                                                    <label for="image-<%= i %>">Delete</label>
+                                                </div>
+                                                <div class="delete-overlay">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        Selected images will be permanently deleted when you save
+                                    </small>
+                                </div>
+                            <% } else { %>
+                                <div class="no-images">
+                                    <i class="fas fa-image"></i>
+                                    <p>No images uploaded yet</p>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="button-group">
+                            <button class="btn-submit" type="submit">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                            <a class="btn-cancel" href="/campground/<%= camp._id %>">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
                 </div>
-            
-               
-                <button class="btn btn-info mb-3" type="submit">Edit Campground</button>
-              
-            </form>
-            <a class="btn btn-danger" href="/campground/camp">Back</a>
+            </div>
         </div>
     </div>
+</div>
 
+<script>
+    // Preview image selection count
+    const fileInput = document.getElementById('image');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const count = e.target.files.length;
+            if (count > 0) {
+                const label = this.parentElement.querySelector('label');
+                label.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> ${count} image${count > 1 ? 's' : ''} selected`;
+            }
+        });
+    }
 
-
-
-
+    // Show delete confirmation for images
+    const deleteCheckboxes = document.querySelectorAll('input[name="deleteImages[]"]');
+    deleteCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checkedCount = document.querySelectorAll('input[name="deleteImages[]"]:checked').length;
+            if (checkedCount > 0) {
+                const form = this.closest('form');
+                form.addEventListener('submit', function(e) {
+                    if (!confirm(`Are you sure you want to delete ${checkedCount} image${checkedCount > 1 ? 's' : ''}?`)) {
+                        e.preventDefault();
+                    }
+                }, { once: true });
+            }
+        });
+    });
+</script>
